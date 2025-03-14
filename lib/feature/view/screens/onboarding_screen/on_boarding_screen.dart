@@ -39,6 +39,7 @@ class OnBoardingScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
+                    flex: 10,
                     child: PageView.builder(
                       controller: cubit.boardController,
                       itemBuilder: (context, index) =>
@@ -49,7 +50,7 @@ class OnBoardingScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  smoothIndicatorWidget(context),
+                  Expanded(child: smoothIndicatorWidget(context)),
                   const SizedBox(
                     height: 20,
                   ),
