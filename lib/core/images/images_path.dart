@@ -1,10 +1,10 @@
 class ImagesPath{
   /// onBoarding
   static const String onBoarding1 =
-      "assets/onBoarding_images/lengtu-shopping.gif";
+      "assets/images/onboarding1.jpg";
   static const String onBoarding2 =
-      "assets/onBoarding_images/christmas-pokemon.gif";
+      "assets/images/onboarding2.jpg";
   static const String onBoarding3 =
-      "assets/onBoarding_images/stickergiant-swipe-up.gif";
+      "assets/images/onboarding3.jpg";
 
 }

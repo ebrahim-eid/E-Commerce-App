@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
 import '../../../../core/helpers/cashe_helper/shared_prefernce.dart';
 import '../../../../core/helpers/helper_functions/helper_functions.dart';
 import '../../../controller/onboarding_cubit/on_boarding_cubit.dart';
 import '../../../model/onboarding_model/onboarding_model.dart';
 import '../../screens/auth_screens/login_screen.dart';
-import '../../screens/onboarding_screen/on_boarding_screen.dart';
 
 Widget smoothIndicatorWidget(context) => Column(
   children: [

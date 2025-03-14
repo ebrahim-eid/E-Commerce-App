@@ -11,15 +11,25 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late Animation<Offset> _offsetAnimation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 2),
-    )..repeat();
-    _navigateToNextScreen();
+      duration: Duration(milliseconds: 1000),
+    )..repeat(reverse: true);
+
+    _offsetAnimation = Tween<Offset>(
+      begin: Offset(-0.2, 0),
+      end: Offset(0.2, 0),
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+
+      _navigateToNextScreen();
   }
 
   @override
@@ -29,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   }
 
   _navigateToNextScreen() async {
-    await Future.delayed(Duration(seconds: 2), () {});
+    await Future.delayed(Duration(milliseconds: 2100), () {});
     dynamic onboarding = CashHelper.getData(key: 'onboarding');
     dynamic token = CashHelper.getData(key: 'token');
     Widget nextScreen = onboarding == null
@@ -41,12 +51,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       context,
       MaterialPageRoute(builder: (context) => nextScreen),
     );
-   
   }
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFFFFFFF),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -54,21 +65,24 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.blue,
-                  child: AnimatedBuilder(
-                    animation: _controller,
-                    builder: (context, child) {
-                      return Transform.rotate(
-                        angle: _controller.value *   -3.14/6.0,
-                        child: child,
-                      );
-                    },
-                    child: Icon(
-                      Icons.shopping_cart,
-                      size: 30,
-                      color: Colors.white,
+                SlideTransition(
+                  position: _offsetAnimation,
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.blue,
+                    child: AnimatedBuilder(
+                      animation: _controller,
+                      builder: (context, child) {
+                        return Transform.rotate(
+                          angle: _controller.value * -3.14 / 6.0,
+                          child: child,
+                        );
+                      },
+                      child: Icon(
+                        Icons.shopping_cart,
+                        size: 30,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
