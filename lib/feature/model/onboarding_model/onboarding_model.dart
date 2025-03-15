@@ -14,18 +14,18 @@ class OnBoardingModel {
   static List<OnBoardingModel> boarding = [
     OnBoardingModel(
       image: ImagesPath.onBoarding1,
-      onBoardingTitle: 'Choose your product',
+      onBoardingTitle: 'Purchase Online',
       onBoardingSubTitle: "Welcome to a World of Limitless Choices Your Perfect Product Awaits!",
     ),
     OnBoardingModel(
       image: ImagesPath.onBoarding2,
-      onBoardingTitle: 'Select Payment Method',
-      onBoardingSubTitle: "For Seamless Transactions, Choose Your Payment Path Your Convenience, Our Priority!",
+      onBoardingTitle: 'Track order',
+      onBoardingSubTitle: "Manage your tasks efficiently with our tools!",
     ),
     OnBoardingModel(
       image: ImagesPath.onBoarding3,
-      onBoardingTitle: 'Deliver at your door step',
-      onBoardingSubTitle: "From Our Doorstep to Yours Swift, Secure, and Contactless Delivery!"
+      onBoardingTitle: 'Get your order',
+      onBoardingSubTitle: "Sign up and start your journey today."
     ),
   ];
 }

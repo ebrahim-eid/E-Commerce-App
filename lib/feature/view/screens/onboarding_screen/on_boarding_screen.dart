@@ -20,7 +20,9 @@ class OnBoardingScreen extends StatelessWidget {
       builder: (context, state) {
         var cubit = OnBoardingCubit.get(context);
         return Scaffold(
+          backgroundColor: Color(0xFFFFFFFF),
           appBar: AppBar(
+            backgroundColor: Color(0xFFFFFFFF),
             actions: [
               TextButton(onPressed: () {
                 CashHelper.setData(key: 'onboarding', value: true).then((value){
@@ -29,7 +31,7 @@ class OnBoardingScreen extends StatelessWidget {
                   }
                 });
               },
-                child:  Text('Skip',style: Theme.of(context).textTheme.titleSmall,),),
+                child:  Text('Skip',style: Theme.of(context).textTheme.titleMedium,),),
               const SizedBox(width: 16,)
             ],
           ),
@@ -39,6 +41,7 @@ class OnBoardingScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
+                    flex: 10,
                     child: PageView.builder(
                       controller: cubit.boardController,
                       itemBuilder: (context, index) =>
@@ -49,7 +52,7 @@ class OnBoardingScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  smoothIndicatorWidget(context),
+                  Expanded(child: smoothIndicatorWidget(context)),
                   const SizedBox(
                     height: 20,
                   ),

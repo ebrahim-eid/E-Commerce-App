@@ -9,8 +9,10 @@ class OnBoardingCubit extends Cubit<OnBoardingStates> {
  static OnBoardingCubit get(context) => BlocProvider.of(context);
   var boardController = PageController();
   bool isLast = false;
+  bool isFirst = true;
 
   void onChanged(int change) {
+    isFirst = change == 0; 
     if (change == 2) {
       isLast = true;
       emit(OnBoardingTrueLastState());
