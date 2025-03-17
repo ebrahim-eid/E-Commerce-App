@@ -1,5 +1,5 @@
 class AppConstants {
-  static String baseUrl = 'https://student.valuxapps.com/api/';
+  static String baseUrl = 'https://ecommerce.routemisr.com/api/v1/';
   static String loginEndPoint = 'login';
   static String registerEndPoint = 'register';
   static String homeEndPoint = 'home';
