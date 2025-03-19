@@ -7,4 +7,9 @@ class AppConstants {
   static String resetPasswordEndPoint = 'auth/resetPassword';
   static String getAllProductEndPoint = 'products';
   static String getProductByIdEndPoint(String id) => 'products/$id';
+  static String addToCartEndPoint = 'cart';
+  static String removeSpecificCartEndPoint(String id) => 'cart/$id';
+  static String deleteUserCartEndPoint = 'cart';
+
+
 }

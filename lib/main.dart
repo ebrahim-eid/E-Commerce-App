@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/feature/controller/cart_cubit/cart_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/helpers/cashe_helper/shared_prefernce.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context)=>OnBoardingCubit()),
-        BlocProvider(create: (context)=>ProductCubit()),
+        BlocProvider(create: (context)=>CartCubit()),
         // BlocProvider(create: (context)=>ShopCubit()..getHomeData()..getCategoriesData()..getFavorite()),
       ],
       child:  MaterialApp(

@@ -36,7 +36,18 @@ class DioHelper{
     String ?token,
 
   }) async{
+     dio!.options.headers=  {
+       'Content-Type':'application/json',
+       'token': token ?? ''
+     };
     final response= await dio!.post(url,data: data);
+     if (response.statusCode! >= 401) {
+       throw DioException(
+         requestOptions: response.requestOptions,
+         response: response,
+         type: DioExceptionType.badResponse,
+       );
+     }
     return response;
   }
 
@@ -54,5 +65,27 @@ class DioHelper{
      }
      return response;
    }
+
+
+    Future<Response> deleteData({
+      required String url,
+      String? token,
+    }) async {
+      dio!.options.headers = {
+        'Content-Type': 'application/json',
+        'token': token ?? '',
+      };
+
+      final response = await dio!.delete(url);
+
+      if (response.statusCode! >= 401) {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          type: DioExceptionType.badResponse,
+        );
+      }
+      return response;
+    }
 }
 
