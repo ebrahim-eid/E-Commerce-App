@@ -18,7 +18,7 @@ class DioHelper{
   }
 
   /// get data
-  static Future<Response>getData({
+   Future<Response>getData({
      required String url,
     Map<String, dynamic> ? query,
     String ? token,
@@ -32,7 +32,7 @@ class DioHelper{
   }
 
   /// post data
-  static Future<Response>postData({
+   Future<Response>postData({
     required String url,
     required Map<String, dynamic> data,
     String ?token,
@@ -54,7 +54,7 @@ class DioHelper{
     return response;
   }
 
-   static Future<Response>putData({
+    Future<Response>putData({
      required String url,
      required Map<String, dynamic> data,
      String ?token
@@ -72,6 +72,27 @@ class DioHelper{
        'lang':'en',
        'Authorization': token ?? ''
      };
+     return response;
+   }
+   Future<Response> deleteData({
+     required String url,
+     String? token,
+   }) async {
+     dio!.options.headers = {
+       'Content-Type': 'application/json',
+       'lang': 'en',
+       'Authorization': token ?? '',
+     };
+
+     final response = await dio!.delete(url);
+
+     if (response.statusCode != 200) {
+       throw DioException(
+         requestOptions: response.requestOptions,
+         response: response,
+         type: DioExceptionType.badResponse,
+       );
+     }
      return response;
    }
 }
