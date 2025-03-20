@@ -31,4 +31,12 @@ class CashHelper {
   static Future clearData(String key) async{
     return await sharedPreferences.remove(key);
   }
+
+  static Future<bool> saveToken(String token) async {
+    return await sharedPreferences.setString('token', token);
+  }
+
+  static String? getToken() {
+    return sharedPreferences.getString('token');
+  }
 }

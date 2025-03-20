@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/core/helpers/helper_functions/helper_functions.dart';
 import 'package:ecommerce_app/feature/view/screens/onboarding_screen/on_boarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/core/helpers/cashe_helper/shared_prefernce.dart';
@@ -41,16 +42,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   _navigateToNextScreen() async {
     await Future.delayed(Duration(milliseconds: 2100), () {});
     dynamic onboarding = CashHelper.getData(key: 'onboarding');
-    dynamic token = CashHelper.getData(key: 'token');
+    String? token = CashHelper.getToken();
     Widget nextScreen = onboarding == null
         ? OnBoardingScreen()
         : token == null
             ? LoginScreen()
             : HomeScreen();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => nextScreen),
-    );
+    HelperFunctions.navigateAndRemove(context, nextScreen);
   }
   
 
