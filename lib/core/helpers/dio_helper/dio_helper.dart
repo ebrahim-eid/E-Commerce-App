@@ -2,18 +2,16 @@ import '../../constants/constant.dart';
 import 'package:dio/dio.dart';
 
 class DioHelper{
-   static Dio ? dio;
-
+    Dio ? dio;
+    DioHelper() {
+      init();
+    }
    /// init
-  static init(){
-    dio=Dio(
+  void init(){
+    dio= Dio(
       BaseOptions(
         baseUrl: AppConstants.baseUrl,
         receiveDataWhenStatusError: true,
-        headers: {
-          'Content-Type':'application/json',
-          'lang':'ar',
-        },
       ));
   }
 
@@ -38,26 +36,24 @@ class DioHelper{
     String ?token,
 
   }) async{
+     dio!.options.headers=  {
+       'Content-Type':'application/json',
+       'token': token ?? ''
+     };
     final response= await dio!.post(url,data: data);
-    if (response.statusCode != 200) {
-      throw DioException(
-        requestOptions: response.requestOptions,
-        response: response,
-        type: DioExceptionType.badResponse,
-      );
-    }
-    dio!.options.headers=  {
-      'Content-Type':'application/json',
-      'lang':'en',
-      'Authorization': token ?? ''
-    };
+     if (response.statusCode! >= 401) {
+       throw DioException(
+         requestOptions: response.requestOptions,
+         response: response,
+         type: DioExceptionType.badResponse,
+       );
+     }
     return response;
   }
 
     Future<Response>putData({
      required String url,
      required Map<String, dynamic> data,
-     String ?token
    }) async{
      final response= await dio!.put(url,data: data);
      if (response.statusCode != 200) {
@@ -67,13 +63,9 @@ class DioHelper{
          type: DioExceptionType.badResponse,
        );
      }
-     dio!.options.headers=  {
-       'Content-Type':'application/json',
-       'lang':'en',
-       'Authorization': token ?? ''
-     };
      return response;
    }
+<<<<<<< HEAD
    Future<Response> deleteData({
      required String url,
      String? token,
@@ -96,3 +88,29 @@ class DioHelper{
      return response;
    }
 }
+=======
+
+
+    Future<Response> deleteData({
+      required String url,
+      String? token,
+    }) async {
+      dio!.options.headers = {
+        'Content-Type': 'application/json',
+        'token': token ?? '',
+      };
+
+      final response = await dio!.delete(url);
+
+      if (response.statusCode! >= 401) {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          type: DioExceptionType.badResponse,
+        );
+      }
+      return response;
+    }
+}
+
+>>>>>>> ibrahim
