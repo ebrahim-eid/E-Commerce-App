@@ -7,10 +7,10 @@ import 'package:ecommerce_app/core/utils/validator.dart';
 import 'package:ecommerce_app/feature/view/screens/auth_screens/forgot_password_screen.dart';
 import 'package:ecommerce_app/feature/view/screens/auth_screens/register_screen.dart';
 import 'package:ecommerce_app/feature/view/screens/home_screens/home_screen.dart';
-import 'package:ecommerce_app/feature/view/widgets/onboarding_widgets/auth_widgets/custom_button.dart';
+import 'package:ecommerce_app/feature/view/widgets/auth_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../widgets/onboarding_widgets/auth_widgets/text_form.dart';
+import '../../widgets/auth_widgets/text_form.dart';
 import '../../../controller/auth_cubit/auth_cubit.dart';
 import '../../../controller/auth_cubit/auth_states.dart';
 

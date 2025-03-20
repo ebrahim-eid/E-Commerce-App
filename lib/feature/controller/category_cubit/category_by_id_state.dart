@@ -1,5 +1,4 @@
 import 'package:ecommerce_app/feature/model/categories_model/category_model.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class CategoryByIdState {}
 
