@@ -65,30 +65,6 @@ class DioHelper{
      }
      return response;
    }
-<<<<<<< HEAD
-   Future<Response> deleteData({
-     required String url,
-     String? token,
-   }) async {
-     dio!.options.headers = {
-       'Content-Type': 'application/json',
-       'lang': 'en',
-       'Authorization': token ?? '',
-     };
-
-     final response = await dio!.delete(url);
-
-     if (response.statusCode != 200) {
-       throw DioException(
-         requestOptions: response.requestOptions,
-         response: response,
-         type: DioExceptionType.badResponse,
-       );
-     }
-     return response;
-   }
-}
-=======
 
 
     Future<Response> deleteData({
@@ -113,4 +89,3 @@ class DioHelper{
     }
 }
 
->>>>>>> ibrahim

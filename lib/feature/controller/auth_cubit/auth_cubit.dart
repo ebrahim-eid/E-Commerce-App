@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:ecommerce_app/core/constants/constant.dart';
+import 'package:ecommerce_app/core/helpers/cashe_helper/shared_prefernce.dart';
 import 'package:ecommerce_app/core/helpers/dio_helper/dio_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'auth_states.dart';
@@ -51,27 +52,26 @@ class AuthCubit extends Cubit<AuthStates> {
   void loginUser({
     required String email,
     required String password,
-}) async{
+  }) async {
     emit(LoginLoadingState());
-    try{
-     final response= await DioHelper().
-     postData(url: AppConstants.loginEndPoint, data:{
-        "email": email,
-        "password": password,
-      });
-     print(response.data['message']);
-     // String token=response.data['token'];
-     emit(LoginSuccessState());
-    } on DioException catch(error){
-      if (error.response?.statusCode==401){
-        print(error.response?.data['message']);
+    try {
+      final response = await DioHelper().postData(
+        url: AppConstants.loginEndPoint,
+        data: {
+          "email": email,
+          "password": password,
+        },
+      );
+      String token = response.data['token'];
+      await CashHelper.saveToken(token);
+      emit(LoginSuccessState());
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 401) {
         emit(LoginErrorState(error.response?.data['message']));
       } else {
-        print(error.toString());
         emit(LoginErrorState(error.toString()));
       }
-    } catch(error){
-      print("Unexpected error: $error");
+    } catch (error) {
       emit(LoginErrorState("Unexpected error: $error"));
     }
   }
@@ -119,22 +119,22 @@ class AuthCubit extends Cubit<AuthStates> {
   void resetPassword({
     required String email,
     required String newPassword,
-}) async{
-    emit(VerifyResetCodeLoadingState());
+  }) async {
+    emit(ResetPasswordLoadingState());
     await DioHelper().putData(url: AppConstants.resetPasswordEndPoint, data: {
-      "email":email,
-      "newPassword":newPassword
-    }).then((value){
-      // if success then navigate to Home Screen Directly screen
+      "email": email,
+      "newPassword": newPassword
+    }).then((value) {
+      // if success then navigate to Home Screen Directly
       print(value.data['token']);
-      emit(VerifyResetCodeSuccessState());
-    }).catchError((error){
-      if (error.response?.statusCode==400){
+      emit(ResetPasswordSuccessState());
+    }).catchError((error) {
+      if (error.response?.statusCode == 400) {
         print(error.response?.data['message']);
-        emit(VerifyResetCodeErrorState(error.response?.data['message']));
+        emit(ResetPasswordErrorState(error.response?.data['message']));
       } else {
         print(error.toString());
-        emit(VerifyResetCodeErrorState(error.toString()));
+        emit(ResetPasswordErrorState(error.toString()));
       }
     });
   }

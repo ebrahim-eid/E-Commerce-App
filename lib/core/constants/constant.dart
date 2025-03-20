@@ -1,15 +1,5 @@
 class AppConstants {
   static String baseUrl = 'https://ecommerce.routemisr.com/api/v1/';
-<<<<<<< HEAD
-  static String loginEndPoint = 'login';
-  static String registerEndPoint = 'register';
-  static String homeEndPoint = 'home';
-  static String categoriesEndPoint = 'categories';
-  static String favoriteEndPoint = 'favorites';
-  static String profileEndPoint = 'profile';
-  static String updateProfileEndPoint = 'update-profile';
-  static String searchEndPoint = 'products/search';
-=======
   static String loginEndPoint = 'auth/signin';
   static String registerEndPoint = 'auth/signup';
   static String forgotPasswordEndPoint = 'auth/forgotPasswords';
@@ -22,5 +12,4 @@ class AppConstants {
   static String deleteUserCartEndPoint = 'cart';
 
 
->>>>>>> ibrahim
 }
