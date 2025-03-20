@@ -39,4 +39,8 @@ class CashHelper {
   static String? getToken() {
     return sharedPreferences.getString('token');
   }
+
+  static Future<bool> removeToken() async {
+    return await sharedPreferences.remove('token');
+  }
 }

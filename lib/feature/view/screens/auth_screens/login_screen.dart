@@ -4,6 +4,7 @@ import 'package:ecommerce_app/core/resources/font_manager.dart';
 import 'package:ecommerce_app/core/resources/style_manager.dart';
 import 'package:ecommerce_app/core/resources/values_manager.dart';
 import 'package:ecommerce_app/core/utils/validator.dart';
+import 'package:ecommerce_app/feature/view/screens/auth_screens/forgot_password_screen.dart';
 import 'package:ecommerce_app/feature/view/screens/auth_screens/register_screen.dart';
 import 'package:ecommerce_app/feature/view/screens/home_screens/home_screen.dart';
 import 'package:ecommerce_app/feature/view/widgets/onboarding_widgets/auth_widgets/custom_button.dart';
@@ -100,18 +101,15 @@ class LoginScreen extends StatelessWidget {
                       Row(
                         children: [
                           const Spacer(),
-                            GestureDetector(
-                            onTap: () {},
+                          GestureDetector(
+                            onTap: () => HelperFunctions.navigateTo(context, ForgotPasswordScreen()),
                             child: Text(
                               'Forget password?',
-                              style: getMediumStyle(color: ColorManager.primary)
-                                .copyWith(
+                              style: getMediumStyle(color: ColorManager.primary).copyWith(
                                 fontSize: FontSize.s16,
                                 decoration: TextDecoration.underline,
                                 decorationThickness: 2.0,
-                                
-                                ),
-                            
+                              ),
                             ),
                           ),
                         ],

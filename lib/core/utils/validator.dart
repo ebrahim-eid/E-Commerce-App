@@ -68,4 +68,14 @@ class Validator {
       return null;
     }
   }
+
+  static String? validateResetCode(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Reset code is required';
+    }
+    if (value.length != 6) {
+      return 'Reset code must be 6 digits';
+    }
+    return null;
+  }
 }
