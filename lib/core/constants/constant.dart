@@ -11,5 +11,5 @@ class AppConstants {
   static String removeSpecificCartEndPoint(String id) => 'cart/$id';
   static String deleteUserCartEndPoint = 'cart';
   static const String updateProfileEndPoint = 'users/updateMe';
-  static const String getProfileEndPoint = 'users/me';
+
 }
