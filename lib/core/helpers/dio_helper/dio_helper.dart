@@ -54,7 +54,12 @@ class DioHelper{
     Future<Response>putData({
      required String url,
      required Map<String, dynamic> data,
+     String? token,
    }) async{
+     dio!.options.headers = {
+       'Content-Type': 'application/json',
+       'token': token ?? '',
+     };
      final response= await dio!.put(url,data: data);
      if (response.statusCode != 200) {
        throw DioException(

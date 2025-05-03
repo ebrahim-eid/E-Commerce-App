@@ -2,6 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:ecommerce_app/core/constants/constant.dart';
 import 'package:ecommerce_app/core/helpers/cashe_helper/shared_prefernce.dart';
 import 'package:ecommerce_app/core/helpers/dio_helper/dio_helper.dart';
+import 'package:ecommerce_app/core/helpers/helper_functions/helper_functions.dart';
+import 'package:ecommerce_app/feature/view/screens/auth_screens/login_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'auth_states.dart';
 
@@ -64,6 +67,17 @@ class AuthCubit extends Cubit<AuthStates> {
       );
       String token = response.data['token'];
       await CashHelper.saveToken(token);
+      
+      // Save user data
+      if (response.data['user'] != null) {
+        final userData = response.data['user'];
+        await CashHelper.setData(key: 'userName', value: userData['name']);
+        await CashHelper.setData(key: 'userEmail', value: userData['email']);
+        if (userData['phone'] != null) {
+          await CashHelper.savePhone(userData['phone']);
+        }
+      }
+      
       emit(LoginSuccessState());
     } on DioException catch (error) {
       if (error.response?.statusCode == 401) {
@@ -137,6 +151,19 @@ class AuthCubit extends Cubit<AuthStates> {
         emit(ResetPasswordErrorState(error.toString()));
       }
     });
+  }
+
+  /// logout
+  Future<void> logout(BuildContext context) async {
+    emit(LogoutLoadingState());
+    try {
+      await CashHelper.removeToken();
+      await CashHelper.removePhone();
+      HelperFunctions.navigateTo(context, LoginScreen());
+      emit(LogoutSuccessState());
+    } catch (error) {
+      emit(LogoutErrorState(error.toString()));
+    }
   }
 }
 

@@ -7,6 +7,7 @@ import 'core/helpers/dio_helper/dio_helper.dart';
 import 'feature/controller/auth_cubit/auth_cubit.dart';
 import 'feature/controller/bloc_observer.dart';
 import 'feature/controller/onboarding_cubit/on_boarding_cubit.dart';
+import 'feature/controller/profile_cubit/profile_cubit.dart';
 
 
 void main() async {
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context)=>OnBoardingCubit()),
         BlocProvider(create: (context)=>CartCubit()),
-        BlocProvider(create:  (context) => AuthCubit()),
+        BlocProvider(create: (context) => AuthCubit()),
+        BlocProvider(create: (context) => ProfileCubit()),
         // BlocProvider(create: (context)=>ShopCubit()..getHomeData()..getCategoriesData()..getFavorite()),
       ],
       child: MaterialApp(

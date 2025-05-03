@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
+  final TextEditingController _searchController = TextEditingController();
   List<Widget> tabs = [
     const HomeTab(),
     const CategoriesTab(),
@@ -24,11 +25,110 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HomeScreenAppBar(),
+      appBar: currentIndex == 0 
+        ? PreferredSize(
+            preferredSize: const Size.fromHeight(130),
+            child: AppBar(
+              surfaceTintColor: Colors.white,
+              automaticallyImplyLeading: false,
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(60),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _searchController,
+                          cursorColor: ColorManager.primary,
+                          style: const TextStyle(
+                            color: ColorManager.primary,
+                            fontSize: 16,
+                          ),
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10000),
+                              borderSide: const BorderSide(
+                                width: 1,
+                                color: ColorManager.primary,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10000),
+                              borderSide: const BorderSide(
+                                width: 1,
+                                color: ColorManager.primary,
+                              ),
+                            ),
+                            disabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10000),
+                              borderSide: const BorderSide(
+                                width: 1,
+                                color: ColorManager.primary,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10000),
+                              borderSide: const BorderSide(
+                                width: 1,
+                                color: ColorManager.primary,
+                              ),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10000),
+                              borderSide: const BorderSide(
+                                width: 1,
+                                color: ColorManager.error,
+                              ),
+                            ),
+                            prefixIcon: const ImageIcon(
+                              AssetImage(IconsPaths.search),
+                              color: ColorManager.primary,
+                            ),
+                            hintText: 'what do you search for?',
+                            hintStyle: const TextStyle(
+                              color: ColorManager.primary,
+                              fontSize: 16,
+                            ),
+                          ),
+                          onFieldSubmitted: (value) {
+                            // TODO: Implement search functionality
+                            print('Searching for: $value');
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          // TODO: Navigate to cart screen
+                        },
+                        icon: const ImageIcon(
+                          AssetImage(IconsPaths.cart),
+                          color: ColorManager.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )
+        : null,
       extendBody: false,
-      body: tabs[currentIndex],
+      body: SafeArea(
+        child: tabs[currentIndex],
+      ),
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadiusDirectional.only(
           topStart: Radius.circular(15),
