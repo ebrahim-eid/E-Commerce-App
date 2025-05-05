@@ -10,8 +10,8 @@ class CategoriesTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: Insets.s12,
-        vertical: Insets.s12,
+        horizontal: Sizes.s10,
+        vertical: Sizes.s40,
       ),
       child: Row(
         children: [
