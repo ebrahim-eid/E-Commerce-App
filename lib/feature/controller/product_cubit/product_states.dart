@@ -25,3 +25,15 @@ class ProductByIdErrorState extends ProductStates {
   ProductByIdErrorState(this.error);
 
 }
+
+/// Products by subcategory
+class ProductsBySubcategoryLoadingState extends ProductStates {}
+
+class ProductsBySubcategorySuccessState extends ProductStates {}
+
+class ProductsBySubcategoryErrorState extends ProductStates {
+  final String error;
+
+  ProductsBySubcategoryErrorState(this.error);
+
+}

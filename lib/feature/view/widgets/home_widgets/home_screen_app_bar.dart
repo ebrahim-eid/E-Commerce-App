@@ -9,15 +9,19 @@ import 'package:flutter/material.dart';
 
 class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool? automaticallyImplyLeading;
-  const HomeScreenAppBar({super.key, this.automaticallyImplyLeading});
+  final bool showSearch;
+  const HomeScreenAppBar({
+    super.key, 
+    this.automaticallyImplyLeading,
+    this.showSearch = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       surfaceTintColor: Colors.white,
       automaticallyImplyLeading: automaticallyImplyLeading ?? false,
-     
-      bottom: PreferredSize(
+      bottom: showSearch ? PreferredSize(
         preferredSize: Size(Sizes.s100, Sizes.s60),
         child: Padding(
           padding: EdgeInsets.all(Insets.s8),
@@ -84,7 +88,6 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               IconButton(
                 onPressed: () => HelperFunctions.navigateTo(context, CartScreen()),
-                
                 icon: const ImageIcon(
                   AssetImage(IconsPaths.cart),
                   color: ColorManager.primary,
@@ -93,10 +96,10 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
-      ),
+      ) : null,
     );
   }
 
   @override
-  Size get preferredSize => Size(0, 130);
+  Size get preferredSize => Size(0, showSearch ? 130 : 60);
 }

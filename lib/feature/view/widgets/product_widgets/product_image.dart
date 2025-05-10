@@ -26,6 +26,7 @@ class ProductImage extends StatelessWidget {
       alignment: AlignmentDirectional.topEnd,
       child: HeartButton(
         onTap: onTap,
+        filled: false,
       ),
     );
   }

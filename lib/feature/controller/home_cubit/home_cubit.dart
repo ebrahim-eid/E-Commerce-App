@@ -4,4 +4,4 @@ class HomeCubit extends Cubit<int> {
   HomeCubit() : super(0);
 
   void changeSelectedIndex(int selectedIndex) => emit(selectedIndex);
-}
+} 

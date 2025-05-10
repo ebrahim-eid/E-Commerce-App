@@ -1,4 +1,3 @@
-
 import 'package:ecommerce_app/core/helpers/dio_helper/dio_helper.dart';
 import 'package:ecommerce_app/feature/model/wishlist_model/wishlist_model.dart';
 
@@ -47,8 +46,7 @@ class WishlistApi {
         url: '/wishlist',
         token: token,
       );
-
-      final List<dynamic> wishlistData = response.data['data'];
+      final List<dynamic> wishlistData = response.data['data'] ?? [];
       return wishlistData.map((item) => WishlistModel.fromJson(item)).toList();
     } catch (e) {
       throw Exception("Failed to fetch wishlist: $e");

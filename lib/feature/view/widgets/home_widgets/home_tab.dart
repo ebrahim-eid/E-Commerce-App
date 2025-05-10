@@ -4,6 +4,9 @@ import 'package:ecommerce_app/feature/view/widgets/home_widgets/announcements_se
 import 'package:ecommerce_app/feature/view/widgets/category_widget.dart/category_item.dart';
 import 'package:ecommerce_app/feature/view/widgets/custom_section_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ecommerce_app/feature/controller/category_cubit/category_cubit.dart';
+import 'package:ecommerce_app/feature/view/screens/product_screens/products_screen.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -41,20 +44,123 @@ class _HomeTabState extends State<HomeTab> {
             children: [
               CustomSectionBar(
                 sectionName: 'Categories',
-                onViewAllClicked: () {},
+                onViewAllClicked: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => Scaffold(
+                        appBar: AppBar(title: Text('All Categories')),
+                        body: BlocBuilder<CategoriesCubit, CategoriesState>(
+                          builder: (context, state) {
+                            if (state is CategoriesLoading) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (state is CategoriesLoaded) {
+                              final categories = state.categories;
+                              return GridView.builder(
+                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 1,
+                                ),
+                                itemCount: categories.length,
+                                itemBuilder: (_, index) {
+                                  final category = categories[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) => ProductsScreen(categoryId: category.id),
+                                        ),
+                                      );
+                                    },
+                                    child: Column(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(100),
+                                          child: Container(
+                                            height: 100,
+                                            width: 100,
+                                            decoration: const BoxDecoration(shape: BoxShape.circle),
+                                            child: Image.network(
+                                              category.image,
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          category.name,
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            } else if (state is CategoriesError) {
+                              return Center(child: Text(state.message));
+                            }
+                            return SizedBox();
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
               SizedBox(
-                height: 270,
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                  ),
-                  itemBuilder: (_, index) => const CategoryItem(),
-                  itemCount: 8,
-                  scrollDirection: Axis.horizontal,
+                height: 150,
+                child: BlocBuilder<CategoriesCubit, CategoriesState>(
+                  builder: (context, state) {
+                    if (state is CategoriesLoading) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (state is CategoriesLoaded) {
+                      final categories = state.categories;
+                      return ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5,
+                        separatorBuilder: (_, __) => SizedBox(width: 16),
+                        itemBuilder: (context, index) {
+                          final category = categories[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => ProductsScreen(categoryId: category.id),
+                                ),
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Container(
+                                    height: 100,
+                                    width: 100,
+                                    decoration: const BoxDecoration(shape: BoxShape.circle),
+                                    child: Image.network(
+                                      category.image,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  category.name,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    } else if (state is CategoriesError) {
+                      return Center(child: Text(state.message));
+                    }
+                    return SizedBox();
+                  },
                 ),
               ),
-              SizedBox(height: 12),
             ],
           ),
         ],

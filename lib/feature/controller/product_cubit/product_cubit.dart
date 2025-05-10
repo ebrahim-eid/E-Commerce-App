@@ -39,4 +39,20 @@ class ProductCubit extends Cubit<ProductStates> {
       emit(ProductByIdErrorState(error.toString()));
     });
   }
+
+  /// get products by subcategory
+  AllProductModel? productsBySubcategory;
+  void getProductsBySubcategory(String subcategoryId) async {
+    emit(ProductsBySubcategoryLoadingState());
+    try {
+      final response = await DioHelper().getData(
+        url: '${AppConstants.getAllProductEndPoint}?subcategory=$subcategoryId',
+      );
+      productsBySubcategory = AllProductModel.fromJson(response.data);
+      emit(ProductsBySubcategorySuccessState());
+    } catch (error) {
+      print(error);
+      emit(ProductsBySubcategoryErrorState(error.toString()));
+    }
+  }
 }

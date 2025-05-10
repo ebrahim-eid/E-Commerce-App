@@ -6,7 +6,7 @@ class CustomButton extends StatelessWidget {
   final Widget? suffixIcon;
   final String label;
   final Color? backgroundColor;
-  final void Function() onTap;
+  final void Function()? onTap;
   final TextStyle? textStyle;
   final bool isStadiumBorder;
 

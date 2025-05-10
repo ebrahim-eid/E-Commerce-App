@@ -55,6 +55,19 @@ class ResetPasswordErrorState extends AuthStates {
   ResetPasswordErrorState(this.error);
 }
 
+/// verify token
+class VerifyTokenLoadingState extends AuthStates {}
+
+class VerifyTokenSuccessState extends AuthStates {
+  final Map<String, dynamic> decoded;
+  VerifyTokenSuccessState(this.decoded);
+}
+
+class VerifyTokenErrorState extends AuthStates {
+  final String error;
+  VerifyTokenErrorState(this.error);
+}
+
 class LogoutLoadingState extends AuthStates {}
 
 class LogoutSuccessState extends AuthStates {}
