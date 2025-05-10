@@ -1,7 +1,7 @@
-
 import 'package:ecommerce_app/core/helpers/dio_helper/dio_helper.dart';
 import 'package:ecommerce_app/feature/model/order_model/order_model.dart';
 import 'package:ecommerce_app/feature/model/order_model/user_order_model.dart';
+import 'package:ecommerce_app/core/helpers/cashe_helper/shared_prefernce.dart';
 
 class OrderRepository {
   final DioHelper dioHelper;
@@ -44,28 +44,41 @@ class OrderRepository {
 
   Future<List<UserOrderModel>> getUserOrders(String userId) async {
     try {
+      final token = CashHelper.getToken();
+      if (token == null) {
+        throw Exception('No authentication token found');
+      }
+
+      print('Fetching orders for user $userId with token'); // Debug print
       final response = await dioHelper.getData(
         url: 'orders/user/$userId',
+        token: token,
       );
 
-      print("API Response: ${response.data}"); // Debugging
+      print("API Response: ${response.data}"); // Debug print
 
       if (response.statusCode == 200 && response.data != null) {
         final data = response.data;
 
-        // Ensure response is a List
+        // Handle both array and object with data property
+        List<dynamic> ordersList;
         if (data is List) {
-          return data
-              .where((order) => order is Map<String, dynamic>) // Filter valid maps
-              .map((order) => UserOrderModel.fromJson(order as Map<String, dynamic>))
-              .toList();
+          ordersList = data;
+        } else if (data is Map && data.containsKey('data')) {
+          ordersList = data['data'] as List;
         } else {
           throw Exception('Unexpected response format: ${response.data}');
         }
+
+        return ordersList
+            .where((order) => order is Map<String, dynamic>) // Filter valid maps
+            .map((order) => UserOrderModel.fromJson(order as Map<String, dynamic>))
+            .toList();
       } else {
-        throw Exception('Failed to load orders');
+        throw Exception('Failed to load orders: ${response.statusCode}');
       }
     } catch (e) {
+      print('Error in getUserOrders: $e'); // Debug print
       throw Exception('Error fetching orders: $e');
     }
   }

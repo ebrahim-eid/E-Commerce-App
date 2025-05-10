@@ -87,9 +87,16 @@ class VerifyResetCodeScreen extends StatelessWidget {
                                     fontSize: FontSize.s18,
                                   ),
                                   onTap: () {
-                                    if (_formKey.currentState!.validate()) {
+                                    if (_resetCodeController.text.length == 5) {
                                       AuthCubit.get(context).verifyResetCode(
                                         _resetCodeController.text,
+                                      );
+                                    } else if (_resetCodeController.text.length != 5) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text('Reset code must be 5 digits'),
+                                          backgroundColor: ColorManager.error,
+                                        ),
                                       );
                                     }
                                   },

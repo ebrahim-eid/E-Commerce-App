@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerce_app/core/helpers/cashe_helper/shared_prefernce.dart';
 import 'package:ecommerce_app/core/helpers/dio_helper/dio_helper.dart';
 import 'package:ecommerce_app/core/constants/constant.dart';
+import 'package:dio/dio.dart';
 import 'profile_states.dart';
 
 class ProfileCubit extends Cubit<ProfileStates> {
@@ -79,6 +80,18 @@ class ProfileCubit extends Cubit<ProfileStates> {
       } else {
         emit(UpdateProfileErrorState(error: 'Failed to update profile'));
       }
+    } on DioException catch (e) {
+      String errorMessage = 'Failed to update profile';
+      
+      if (e.response?.statusCode == 400) {
+        if (e.response?.data['email'] != null) {
+          errorMessage = 'This email is already in use';
+        } else if (e.response?.data['phone'] != null) {
+          errorMessage = 'This phone number is already in use';
+        }
+      }
+      
+      emit(UpdateProfileErrorState(error: errorMessage));
     } catch (error) {
       emit(UpdateProfileErrorState(error: error.toString()));
     }
