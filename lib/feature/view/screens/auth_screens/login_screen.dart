@@ -13,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../widgets/auth_widgets/text_form.dart';
 import '../../../controller/auth_cubit/auth_cubit.dart';
 import '../../../controller/auth_cubit/auth_states.dart';
+import '../../../controller/home_cubit/home_cubit.dart';
 
 class LoginScreen extends StatelessWidget {
    LoginScreen({super.key});
@@ -23,14 +24,18 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthStates>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is LoginSuccessState) {
+          // Verify token and get user ID after successful login
+          await context.read<AuthCubit>().verifyToken();
+          
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Logged in successfully!'),
               backgroundColor: ColorManager.success,
             ),
           );
+          context.read<HomeCubit>().changeSelectedIndex(0);
           HelperFunctions.navigateAndRemove(context, HomeScreen());
         } else if (state is LoginErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -68,7 +73,7 @@ class LoginScreen extends StatelessWidget {
                         height: Sizes.s8,
                       ),
                       Text(
-                        'Welcome back, you’ve been missed!',
+                        'Welcome back, you\'ve been missed!',
                         style: getLightStyle(color: ColorManager.grey)
                             .copyWith(fontSize: FontSize.s16),
                       ),
@@ -87,32 +92,32 @@ class LoginScreen extends StatelessWidget {
                         height: Sizes.s28,
                       ),
                       CustomTextField(
-                        hint: '********',
                         backgroundColor: ColorManager.white,
+                        hint: '********',
                         label: 'Password',
+                        textInputType: TextInputType.text,
                         validation: Validator.validatePassword,
                         isObscured: true,
-                        textInputType: TextInputType.text,
                         controller: _passwordController,
                       ),
                       SizedBox(
                         height: Sizes.s8,
                       ),
-                      Row(
-                        children: [
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () => HelperFunctions.navigateTo(context, ForgotPasswordScreen()),
-                            child: Text(
-                              'Forget password?',
-                              style: getMediumStyle(color: ColorManager.primary).copyWith(
-                                fontSize: FontSize.s16,
-                                decoration: TextDecoration.underline,
-                                decorationThickness: 2.0,
-                              ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            HelperFunctions.navigateTo(
+                                context, ForgotPasswordScreen());
+                          },
+                          child: Text(
+                            'Forgot Password?',
+                            style: getMediumStyle(
+                              color: ColorManager.primary,
+                              fontSize: FontSize.s14,
                             ),
                           ),
-                        ],
+                        ),
                       ),
                       SizedBox(
                         height: Sizes.s28,
@@ -149,19 +154,23 @@ class LoginScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Don’t have an account?',
-                            style: getSemiBoldStyle(color: ColorManager.black)
-                                .copyWith(fontSize: FontSize.s16),
+                            'Don\'t have an account?',
+                            style: getRegularStyle(
+                              color: ColorManager.grey,
+                              fontSize: FontSize.s14,
+                            ),
                           ),
-                          SizedBox(
-                            width: Sizes.s8,
-                          ),
-                          GestureDetector(
-                            onTap: () => HelperFunctions.navigateAndRemove(context,  RegisterScreen()),
+                          TextButton(
+                            onPressed: () {
+                              HelperFunctions.navigateTo(
+                                  context, RegisterScreen());
+                            },
                             child: Text(
                               'Sign Up',
-                              style: getSemiBoldStyle(color: ColorManager.primary)
-                                  .copyWith(fontSize: FontSize.s16,decoration: TextDecoration.underline),
+                              style: getMediumStyle(
+                                color: ColorManager.primary,
+                                fontSize: FontSize.s14,
+                              ),
                             ),
                           ),
                         ],

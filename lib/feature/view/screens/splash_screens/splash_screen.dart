@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:ecommerce_app/core/helpers/cashe_helper/shared_prefernce.dart';
 import 'package:ecommerce_app/feature/view/screens/auth_screens/login_screen.dart';
 import 'package:ecommerce_app/feature/view/screens/home_screens/home_screen.dart';
+import 'package:ecommerce_app/feature/controller/home_cubit/home_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ecommerce_app/feature/controller/auth_cubit/auth_cubit.dart';
+import 'package:ecommerce_app/feature/controller/auth_cubit/auth_states.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -30,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       curve: Curves.easeInOut,
     ));
 
-      _navigateToNextScreen();
+    _navigateToNextScreen();
   }
 
   @override
@@ -43,14 +47,20 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     await Future.delayed(Duration(milliseconds: 2100), () {});
     dynamic onboarding = CashHelper.getData(key: 'onboarding');
     String? token = CashHelper.getToken();
-    Widget nextScreen = onboarding == null
-        ? OnBoardingScreen()
-        : token == null
-            ? LoginScreen()
-            : HomeScreen();
-    HelperFunctions.navigateAndRemove(context, nextScreen);
+    
+    if (onboarding == null) {
+      HelperFunctions.navigateAndRemove(context, OnBoardingScreen());
+    } else if (token == null) {
+      HelperFunctions.navigateAndRemove(context, LoginScreen());
+    } else {
+      // Verify token before navigating to home screen
+      await context.read<AuthCubit>().verifyToken();
+      if (mounted) {
+        context.read<HomeCubit>().changeSelectedIndex(0);
+        HelperFunctions.navigateAndRemove(context, HomeScreen());
+      }
+    }
   }
-  
 
   @override
   Widget build(BuildContext context) {
