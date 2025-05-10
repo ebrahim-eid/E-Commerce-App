@@ -7,7 +7,10 @@ class AllProductModel {
   factory AllProductModel.fromJson(Map<String, dynamic> json) {
     return AllProductModel(
       results: json['results'],
-      data: (json['data'] as List).map((e) => DataModel.fromJson(e)).toList(),
+      data: (json['data'] as List?)
+              ?.where((e) => e != null)
+              .map((e) => DataModel.fromJson(e))
+              .toList() ?? [],
     );
   }
 }
@@ -54,11 +57,11 @@ class DataModel {
   factory DataModel.fromJson(Map<String, dynamic> json) {
     return DataModel(
       sold: json["sold"],
-      images: List<String>.from(json["images"]),
-      subcategory:
-          (json['subcategory'] as List)
+      images: List<String>.from(json["images"] ?? []),
+      subcategory: (json['subcategory'] as List?)
+              ?.where((e) => e != null)
               .map((e) => SubcategoryModel.fromJson(e))
-              .toList(),
+              .toList() ?? [],
       ratingsQuantity: json["ratingsQuantity"],
       sId: json["_id"],
       title: json["title"],
@@ -67,12 +70,16 @@ class DataModel {
       quantity: json["quantity"],
       price: json["price"],
       imageCover: json["imageCover"],
-      category: CategoryAndBrandModel.fromJson(json["category"]),
-      brand: CategoryAndBrandModel.fromJson(json["brand"]),
+      category: json["category"] != null
+          ? CategoryAndBrandModel.fromJson(json["category"])
+          : CategoryAndBrandModel.empty(),
+      brand: json["brand"] != null
+          ? CategoryAndBrandModel.fromJson(json["brand"])
+          : CategoryAndBrandModel.empty(),
       ratingsAverage:
           (json["ratingsAverage"] is int)
               ? (json["ratingsAverage"] as int).toDouble()
-              : json["ratingsAverage"],
+              : (json["ratingsAverage"] ?? 0.0),
       createdAt: json["createdAt"],
       updatedAt: json["updatedAt"],
       id: json["id"],
@@ -95,10 +102,10 @@ class SubcategoryModel {
 
   factory SubcategoryModel.fromJson(Map<String, dynamic> json) {
     return SubcategoryModel(
-      sId: json['_id'],
-      name: json['name'],
-      slug: json['slug'],
-      category: json['category'],
+      sId: json['_id'] ?? '',
+      name: json['name'] ?? '',
+      slug: json['slug'] ?? '',
+      category: json['category'] ?? '',
     );
   }
 }
@@ -118,10 +125,17 @@ class CategoryAndBrandModel {
 
   factory CategoryAndBrandModel.fromJson(Map<String, dynamic> json) {
     return CategoryAndBrandModel(
-      sId: json['_id'],
-      name: json['name'],
-      slug: json['slug'],
-      image: json['image'],
+      sId: json['_id'] ?? '',
+      name: json['name'] ?? '',
+      slug: json['slug'] ?? '',
+      image: json['image'] ?? '',
     );
   }
+
+  factory CategoryAndBrandModel.empty() => CategoryAndBrandModel(
+    sId: '',
+    name: '',
+    slug: '',
+    image: '',
+  );
 }

@@ -14,12 +14,19 @@ class CartModel {
   });
 
   factory CartModel.fromJson(Map<String, dynamic> json) {
+    final dataField = json['data'];
+    CartData cartData;
+    if (dataField is Map<String, dynamic>) {
+      cartData = CartData.fromJson(dataField);
+    } else {
+      cartData = CartData.empty();
+    }
     return CartModel(
-      status: json['status'],
-      message: json['message'],
-      numOfCartItems: json['numOfCartItems'],
-      cartId: json['cartId'],
-      data: CartData.fromJson(json['data']),
+      status: json['status'] ?? '',
+      message: json['message'] ?? '',
+      numOfCartItems: json['numOfCartItems'] ?? 0,
+      cartId: json['cartId'] ?? '',
+      data: cartData,
     );
   }
 }
@@ -41,18 +48,26 @@ class CartData {
     required this.totalCartPrice,
   });
 
-  factory CartData.fromJson(Map<String, dynamic> json) {
+  factory CartData.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return CartData.empty();
     return CartData(
-      id: json['_id'],
-      cartOwner: json['cartOwner'],
-      products: (json['products'] as List)
-          .map((e) => CartProduct.fromJson(e))
-          .toList(),
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-      totalCartPrice: json['totalCartPrice'],
+      id: json['_id'] ?? '',
+      cartOwner: json['cartOwner'] ?? '',
+      products: (json['products'] as List?)?.map((e) => CartProduct.fromJson(e)).toList() ?? [],
+      createdAt: json['createdAt'] ?? '',
+      updatedAt: json['updatedAt'] ?? '',
+      totalCartPrice: json['totalCartPrice'] ?? 0,
     );
   }
+
+  factory CartData.empty() => CartData(
+    id: '',
+    cartOwner: '',
+    products: [],
+    createdAt: '',
+    updatedAt: '',
+    totalCartPrice: 0,
+  );
 }
 
 class CartProduct {
@@ -60,20 +75,63 @@ class CartProduct {
   final String id;
   final String productId;
   final int price;
+  final ProductDetails product;
 
   CartProduct({
     required this.count,
     required this.id,
     required this.productId,
     required this.price,
+    required this.product,
   });
 
   factory CartProduct.fromJson(Map<String, dynamic> json) {
+    final productField = json['product'];
+    ProductDetails productDetails;
+    String productId;
+    if (productField is Map<String, dynamic>) {
+      productDetails = ProductDetails.fromJson(productField);
+      productId = productField['_id'] ?? '';
+    } else {
+      productDetails = ProductDetails(
+        id: productField ?? '',
+        title: '',
+        imageCover: '',
+        ratingsAverage: 0.0,
+      );
+      productId = productField ?? '';
+    }
     return CartProduct(
       count: json['count'],
       id: json['_id'],
-      productId: json['product'],
+      productId: productId,
       price: json['price'],
+      product: productDetails,
+    );
+  }
+}
+
+class ProductDetails {
+  final String id;
+  final String title;
+  final String imageCover;
+  final double ratingsAverage;
+
+  ProductDetails({
+    required this.id,
+    required this.title,
+    required this.imageCover,
+    required this.ratingsAverage,
+  });
+
+  factory ProductDetails.fromJson(Map<String, dynamic> json) {
+    return ProductDetails(
+      id: json['_id'],
+      title: json['title'],
+      imageCover: json['imageCover'],
+      ratingsAverage: (json['ratingsAverage'] is int)
+          ? (json['ratingsAverage'] as int).toDouble()
+          : json['ratingsAverage'],
     );
   }
 }

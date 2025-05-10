@@ -1,10 +1,13 @@
 import 'package:ecommerce_app/core/resources/color_manager.dart';
 import 'package:ecommerce_app/core/resources/values_manager.dart';
+import 'package:ecommerce_app/feature/controller/category_cubit/category_cubit.dart';
+import 'package:ecommerce_app/feature/controller/sub_category_cubit/sub_category_cubit.dart';
 import 'package:ecommerce_app/feature/view/widgets/category_widget.dart/category_text_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CategoriesList extends StatefulWidget {
-  const CategoriesList();
+  const CategoriesList({super.key});
 
   @override
   State<CategoriesList> createState() => _CategoriesListState();
@@ -43,19 +46,37 @@ class _CategoriesListState extends State<CategoriesList> {
             topStart: Radius.circular(Sizes.s12),
             bottomStart: Radius.circular(Sizes.s12),
           ),
-          child: ListView.builder(
-            itemCount: 20,
-            itemBuilder: (_, index) => CategoryTextItem(
-              index,
-              'Laptops',
-              _selectedIndex == index,
-              onItemClick,
-            ),
+          child: BlocBuilder<CategoriesCubit, CategoriesState>(
+            builder: (context, state) {
+              if (state is CategoriesLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is CategoriesLoaded) {
+                return ListView.builder(
+                  itemCount: state.categories.length,
+                  itemBuilder: (_, index) => CategoryTextItem(
+                    index,
+                    state.categories[index].name,
+                    _selectedIndex == index,
+                    onItemClick,
+                  ),
+                );
+              } else if (state is CategoriesError) {
+                return Center(child: Text(state.message));
+              }
+              return const SizedBox();
+            },
           ),
         ),
       ),
     );
   }
 
-  void onItemClick(int index) => setState(() => _selectedIndex = index);
+  void onItemClick(int index) {
+    setState(() => _selectedIndex = index);
+    final state = context.read<CategoriesCubit>().state;
+    if (state is CategoriesLoaded) {
+      final categoryId = state.categories[index].id;
+      context.read<SubCategoryCubit>().fetchSubCategoriesByCategory(categoryId);
+    }
+  }
 }

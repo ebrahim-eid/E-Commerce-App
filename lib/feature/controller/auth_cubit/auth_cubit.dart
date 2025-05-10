@@ -165,6 +165,39 @@ class AuthCubit extends Cubit<AuthStates> {
       emit(LogoutErrorState(error.toString()));
     }
   }
+
+  /// verify token
+  Future<void> verifyToken() async {
+    emit(VerifyTokenLoadingState());
+    try {
+      String? token = CashHelper.getToken();
+      if (token == null) {
+        emit(VerifyTokenErrorState('No token found'));
+        return;
+      }
+
+      final response = await DioHelper().getData(
+        url: AppConstants.verifyTokenEndPoint,
+        token: token,
+      );
+
+      if (response.data['message'] == 'verified') {
+        // Save user ID for later use
+        await CashHelper.setData(key: 'userId', value: response.data['decoded']['id']);
+        emit(VerifyTokenSuccessState(response.data['decoded']));
+      } else {
+        emit(VerifyTokenErrorState('Token verification failed'));
+      }
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 401) {
+        emit(VerifyTokenErrorState('Invalid or expired token'));
+      } else {
+        emit(VerifyTokenErrorState(error.toString()));
+      }
+    } catch (error) {
+      emit(VerifyTokenErrorState('Unexpected error: $error'));
+    }
+  }
 }
 
 /// get all users and verify token

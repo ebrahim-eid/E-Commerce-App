@@ -22,4 +22,10 @@ class GetWishlistCubit extends Cubit<GetWishlistState> {
     }
   }
 
+  /// Call this after add/remove to refresh and update UI
+  Future<void> refreshWishlist(String token) async {
+    wishlist = await wishlistRepository.getWishlist(token);
+    emit(GetWishlistLoaded(wishlist));
+  }
+
 }

@@ -13,10 +13,10 @@ class SubCategoryModel {
 
   factory SubCategoryModel.fromJson(Map<String, dynamic> json) {
     return SubCategoryModel(
-      id: json['_id'],
-      name: json['name'],
-      category: json['category'],
-      image: json['image'],
+      id: json['_id'] ?? '',
+      name: json['name'] ?? '',
+      category: json['category'] ?? '',
+      image: json['image'] ?? '',
     );
   }
 

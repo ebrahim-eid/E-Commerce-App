@@ -20,4 +20,14 @@ class SubCategoryCubit extends Cubit<SubCategoryState> {
       emit(SubCategoryError(e.toString()));
     }
   }
+
+  void fetchSubCategoriesByCategory(String categoryId) async {
+    emit(SubCategoryLoading());
+    try {
+      final subCategories = await repository.getSubCategoriesByCategory(categoryId);
+      emit(SubCategorySuccess(subCategories));
+    } catch (e) {
+      emit(SubCategoryError(e.toString()));
+    }
+  }
 }
